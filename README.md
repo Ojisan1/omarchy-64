@@ -6,6 +6,8 @@ Type `c64`. A Commodore 64 drops onto your desktop.
 
 ![OMARCHY 64 boot screen](screenies/boot.png)
 
+This is **not a theme**. Your current Omarchy theme stays. Only the window launched by `c64` gets the blue screen.
+
 ## Install
 
 User-space only. No sudo, no packages, no theme switch.
@@ -22,19 +24,17 @@ Then, from a normal terminal:
 c64
 ```
 
-A 4:3 CRT floats in the middle of the screen — chunky C64 Pro Mono, VIC-II blues, and a boot banner with *your* RAM instead of `38911 BASIC BYTES FREE`. Super+Enter is unchanged. `exit` or Ctrl+D closes the CRT; nothing leaks into other terminals.
+A 4:3 CRT floats in the middle of the screen — chunky C64 Pro Mono, VIC-II blues, and a boot banner with your installed RAM and Bash major version instead of `38911 BASIC BYTES FREE`.
 
-Super+T tiles the float if you want it docked. Super+F maximizes.
+- Super+Enter is unchanged (normal terminals).
+- `exit` or Ctrl+D closes the CRT. Nothing leaks into other terminals.
+- Super+T tiles the float if you want it docked. Super+F maximizes.
 
 ## Uninstall
 
 ```bash
 ./uninstall.sh
 ```
-
-## What it is not
-
-Not an Omarchy theme. Osaka Jade (or whatever you use) stays. Super+Enter, `omarchy launch tui`, and the rest of the desktop are untouched. Only windows launched with `c64` get the blue screen.
 
 ## License
 

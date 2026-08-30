@@ -22,17 +22,29 @@ _omarchy_c64_center() {
   printf '%*s%s\n' "$pad" '' "$text"
 }
 
+_omarchy_c64_ram_g() {
+  local bytes gi
+  if command -v lsmem >/dev/null; then
+    bytes=$(lsmem --summary --bytes 2>/dev/null | awk '/Total online memory:/ {print $4}')
+    if [[ "$bytes" =~ ^[0-9]+$ && "$bytes" -gt 0 ]]; then
+      echo $((bytes / 1024 / 1024 / 1024))
+      return
+    fi
+  fi
+  # MemTotal is usable RAM (often a couple of GiB short of the sticks). Round
+  # up to the next 8G, which matches how DIMMs are sold.
+  gi=$(( ($(awk '/^MemTotal:/ {print $2}' /proc/meminfo) + 524288) / 1048576 ))
+  echo $(( (gi + 7) / 8 * 8 ))
+}
+
 _omarchy_c64_splash() {
-  local ver major title ram_line mem_kb mem_avail_kb mem_g mem_free_bytes
+  local title ram_line mem_g mem_avail_kb mem_free_bytes bash_major
 
-  ver=$(omarchy version 2>/dev/null | head -n1 || true)
-  major=${ver%%.*}
-  [[ "$major" =~ ^[0-9]+$ ]] || major=4
-  title="**** OMARCHY 64 BASH V${major} ****"
+  bash_major="${BASH_VERSINFO[0]:-5}"
+  title="**** OMARCHY 64 BASH V${bash_major} ****"
 
-  mem_kb=$(awk '/^MemTotal:/ {print $2}' /proc/meminfo)
+  mem_g=$(_omarchy_c64_ram_g)
   mem_avail_kb=$(awk '/^MemAvailable:/ {print $2}' /proc/meminfo)
-  mem_g=$(( (mem_kb + 524288) / 1048576 ))
   mem_free_bytes=$(( mem_avail_kb * 1024 ))
   ram_line="${mem_g}G RAM SYSTEM  ${mem_free_bytes} BYTES FREE"
 
@@ -83,4 +95,4 @@ PROMPT_COMMAND=_omarchy_c64_prompt
 _omarchy_c64_prompt
 
 _omarchy_c64_splash
-unset -f _omarchy_c64_cols _omarchy_c64_center _omarchy_c64_splash
+unset -f _omarchy_c64_cols _omarchy_c64_center _omarchy_c64_ram_g _omarchy_c64_splash
