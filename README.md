@@ -16,17 +16,15 @@ cd omarchy-64
 ./install.sh
 ```
 
-Then:
+Then, from a normal terminal:
 
 ```bash
 c64
 ```
 
-Super+Enter opens a 4:3 CRT in the middle of the screen — chunky C64 Pro Mono, VIC-II blues, and a boot banner with *your* RAM instead of `38911 BASIC BYTES FREE`. Type `c64` again to get your normal terminal back.
+A 4:3 CRT floats in the middle of the screen — chunky C64 Pro Mono, VIC-II blues, and a boot banner with *your* RAM instead of `38911 BASIC BYTES FREE`. Super+Enter is unchanged. `exit` or Ctrl+D closes the CRT; nothing leaks into other terminals.
 
-`c64 off` / `c64 on` / `c64 status` work too.
-
-Super+T tiles the float if you want it docked. Super+F maximizes. Close the window whenever.
+Super+T tiles the float if you want it docked. Super+F maximizes.
 
 ## Uninstall
 
@@ -36,7 +34,7 @@ Super+T tiles the float if you want it docked. Super+F maximizes. Close the wind
 
 ## What it is not
 
-Not an Omarchy theme. Osaka Jade (or whatever you use) stays. Only Super+Enter is hijacked, and only while the easter egg is on. `omarchy launch tui` and the rest of the desktop are untouched.
+Not an Omarchy theme. Osaka Jade (or whatever you use) stays. Super+Enter, `omarchy launch tui`, and the rest of the desktop are untouched. Only windows launched with `c64` get the blue screen.
 
 ## License
 

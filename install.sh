@@ -6,9 +6,23 @@ ROOT="$(cd "$(dirname "$0")" && pwd)"
 MARKER="OMARCHY 64"
 FONT_ZIP_URL="https://style64.org/file/C64_TrueType_v1.2.1-STYLE.zip"
 FONT_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/fonts/c64"
-STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/omarchy"
 
 die() { echo "OMARCHY 64: $*" >&2; exit 1; }
+
+remove_block() {
+  local file="$1" comment="$2"
+  local start="${comment} >>> ${MARKER} >>>"
+  local end="${comment} <<< ${MARKER} <<<"
+  [[ -f "$file" ]] || return 0
+  local tmp
+  tmp="$(mktemp)"
+  awk -v s="$start" -v e="$end" '
+    $0 == s { skip = 1; next }
+    $0 == e { skip = 0; next }
+    !skip { print }
+  ' "$file" >"$tmp"
+  mv "$tmp" "$file"
+}
 
 upsert_block() {
   local file="$1" comment="$2" snippet="$3"
@@ -70,10 +84,10 @@ fi
 
 # --- user config snippets ---
 upsert_block "$HOME/.bashrc" "#" "$ROOT/snippets/bashrc.sh"
-upsert_block "$HOME/.config/hypr/bindings.lua" "--" "$ROOT/snippets/bindings.lua"
 upsert_block "$HOME/.config/hypr/hyprland.lua" "--" "$ROOT/snippets/hyprland.lua"
-
-mkdir -p "$STATE_DIR"
+# Older installs hijacked Super+Enter. Leave that key alone.
+remove_block "$HOME/.config/hypr/bindings.lua" "--"
+rm -f "${XDG_STATE_HOME:-$HOME/.local/state}/omarchy/c64-terminal"
 
 if command -v hyprctl >/dev/null && [[ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]]; then
   hyprctl reload >/dev/null
@@ -81,6 +95,7 @@ fi
 
 echo
 echo "Installed. Type:  c64"
-echo "Super+Enter then loads the blue screen. Type c64 again to leave."
+echo "A CRT floats over the desktop. Super+Enter stays the normal terminal."
+echo "exit or Ctrl+D closes it."
 echo
 echo "READY."

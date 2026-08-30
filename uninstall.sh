@@ -39,6 +39,6 @@ if command -v hyprctl >/dev/null && [[ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]];
   hyprctl reload >/dev/null
 fi
 
-echo "Removed. Super+Enter is the default terminal again."
+echo "Removed. No leftover binds or terminal profiles."
 echo
 echo "READY."
